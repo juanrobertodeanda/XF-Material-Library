@@ -20,8 +20,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>MinimumOSVersion</key>
-	<string>8.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>MaterialMvvmSample</string>
 	<key>CFBundleVersion</key>
@@ -43,6 +41,6 @@
 		<string>Fonts/Roboto-Medium.ttf</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>ch.erni.test</string>
+	<string>com.pemex.sisca</string>
 </dict>
 </plist>

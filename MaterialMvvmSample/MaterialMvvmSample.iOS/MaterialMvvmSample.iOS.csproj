@@ -49,10 +49,10 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer: Danielle Dustin Catap (9VEQRZL4UZ)</CodesignKey>
+    <CodesignKey>iPhone Developer: Cesar Conchello Brito (5M92AT526K)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>Generic Dev Profile</CodesignProvision>
+    <CodesignProvision>iOS Team Provisioning Profile: com.pemex.sisca</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>

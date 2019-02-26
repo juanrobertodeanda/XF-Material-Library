@@ -26,6 +26,11 @@ namespace MaterialMvvmSample.Views
         {
             Debug.WriteLine($"Selected {e.SelectedItem}");
         }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            entry.Text = "1000";
+        }
     }
 
     public abstract class BaseMainView : BaseView<MainViewModel> { }

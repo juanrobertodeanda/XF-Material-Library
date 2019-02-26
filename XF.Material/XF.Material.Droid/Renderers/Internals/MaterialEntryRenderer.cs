@@ -2,9 +2,13 @@
 using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Support.V4.Content;
+using Android.Text;
+using Android.Views.InputMethods;
+using Android.Widget;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using XF.Material.Droid.Renderers.Internals;
+using XF.Material.Droid.Utilities;
 using XF.Material.Forms.UI.Internals;
 
 [assembly: ExportRenderer(typeof(MaterialEntry), typeof(MaterialEntryRenderer))]
@@ -18,13 +22,37 @@ namespace XF.Material.Droid.Renderers.Internals
         {
             base.OnElementChanged(e);
 
-            if (e?.NewElement != null)
+            if (e?.NewElement == null) return;
+            this.ChangeCursorColor();
+            this.Control.Background = new ColorDrawable(Color.Transparent.ToAndroid());
+            this.Control.SetPadding(0, 0, 0, 0);
+            this.Control.SetIncludeFontPadding(false);
+
+            if ((Element as MaterialEntry).HasNumberFormat)
             {
-                this.ChangeCursorColor();
-                this.Control.Background = new ColorDrawable(Color.Transparent.ToAndroid());
-                this.Control.SetPadding(0, 0, 0, 0);
-                this.Control.SetIncludeFontPadding(false);
+                Control.AddTextChangedListener(new NumberTextWatcher(Control));
             }
+
+            if ((Element as MaterialEntry).AlwaysUppercase)
+            {
+                Control.SetFilters(new Android.Text.IInputFilter[] { new InputFilterAllCaps() });
+            }
+
+            if (!(Element as MaterialEntry).ShowKeyboard)
+            {
+                Control.ShowSoftInputOnFocus = false;
+            }
+        }
+
+        private void Control_Click(object sender, System.EventArgs e)
+        {
+            HideKeyboard();
+        }
+
+        private void HideKeyboard()
+        {
+            InputMethodManager imm = (InputMethodManager)Context.GetSystemService(Context.InputMethodService);
+            imm.HideSoftInputFromWindow(Control.WindowToken, 0);
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -43,7 +71,7 @@ namespace XF.Material.Droid.Renderers.Internals
             {
                 var field = Java.Lang.Class.FromType(typeof(Android.Widget.TextView)).GetDeclaredField("mCursorDrawableRes");
                 field.Accessible = true;
-                int resId = field.GetInt(this.Control);
+                var resId = field.GetInt(this.Control);
 
                 field = Java.Lang.Class.FromType(typeof(Android.Widget.TextView)).GetDeclaredField("mEditor");
                 field.Accessible = true;
