@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace XF.Material.Forms.UI.Internals
 {
@@ -11,9 +12,12 @@ namespace XF.Material.Forms.UI.Internals
         public static readonly BindableProperty AlwaysUppercaseProperty = BindableProperty.Create(nameof(AlwaysUppercase), typeof(bool), typeof(MaterialEntry), false);
         public static readonly BindableProperty HasNumberFormatProperty = BindableProperty.Create(nameof(HasNumberFormat), typeof(bool), typeof(MaterialEntry), false);
         public static readonly BindableProperty TintColorProperty = BindableProperty.Create(nameof(TintColor), typeof(Color), typeof(MaterialEntry), Material.Color.Secondary);
-        public static readonly BindableProperty IsDateTimeProperty = BindableProperty.Create(nameof(IsDateTime), typeof(bool), typeof(MaterialEntry), false);
+        public static readonly BindableProperty DateProperty = BindableProperty.Create(nameof(Date), typeof(DateTime?), typeof(MaterialEntry), null, BindingMode.TwoWay);
+        public static readonly BindableProperty InputTypeProperty = BindableProperty.Create(nameof(InputType), typeof(MaterialTextFieldInputType), typeof(MaterialEntry), MaterialTextFieldInputType.Default);
 
-        internal MaterialEntry() { }
+        internal MaterialEntry()
+        {
+        }
 
         public bool ShowKeyboard
         {
@@ -39,10 +43,16 @@ namespace XF.Material.Forms.UI.Internals
             set => this.SetValue(TintColorProperty, value);
         }
 
-        public bool IsDateTime
+        public DateTime? Date
         {
-            get => (bool)this.GetValue(IsDateTimeProperty);
-            set => this.SetValue(IsDateTimeProperty, value);
+            get => (DateTime?)this.GetValue(DateProperty);
+            set => this.SetValue(DateProperty, value);
+        }
+        
+        public MaterialTextFieldInputType InputType
+        {
+            get => (MaterialTextFieldInputType)this.GetValue(InputTypeProperty);
+            set => this.SetValue(InputTypeProperty, value);
         }
     }
 }

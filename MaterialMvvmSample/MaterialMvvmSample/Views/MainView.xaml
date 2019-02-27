@@ -142,18 +142,19 @@
                                             Placeholder="Username"
                                             TintColor="#2c3e50" />-->
 
-                <Button Clicked="Button_Clicked" Text="Llenar" />
+                <Button Command="{Binding Clicked}" Text="Llenar" />
 
                 <material:MaterialTextField x:Name="entry" 
                                             Placeholder="Operación"
-                                            IsDateTime="True"
                                             ShowKeyboard="False"
+                                            HasError="{Binding HasError}"
+                                            Date="{Binding Eta}"
                                             AlwaysShowUnderline ="True"
                                             IsSpellCheckEnabled="False"
                                             IsTextPredictionEnabled="False"
                                             BackgroundColor="Transparent"
-                                            Choices="{Binding Choices}"
-                                            InputType="Text" />
+                                            ErrorText="Este campo es obligatorio" 
+                                            InputType="Date" />
                 
                 <material:MaterialTextField AlwaysShowUnderline="True"
                                             BackgroundColor="Transparent"
@@ -169,13 +170,17 @@
                                             Placeholder="Email Address"
                                             Text="{Binding Email}"
                                             TintColor="#2c3e50" />
+                
                 <material:MaterialTextField AlwaysShowUnderline="True"
                                             BackgroundColor="Transparent"
                                             HelperText="*Required"
-                                            InputType="Password"
+                                            HasError="True"
+                                            ErrorText="Este campo es obligatorio" 
+                                            InputType="Default"
                                             MaxLength="8"
                                             Placeholder="Password"
                                             TintColor="#2c3e50" />
+                
                 <material:MaterialTextField AlwaysShowUnderline="True"
                                             BackgroundColor="Transparent"
                                             HelperText="*Required"
@@ -183,6 +188,7 @@
                                             MaxLength="8"
                                             Placeholder="Confirm Password"
                                             TintColor="#2c3e50" />
+                
                 <material:MaterialMenuButton ButtonType="Text"
                                              HorizontalOptions="End"
                                              Image="ic_overflow"

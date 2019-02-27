@@ -8,7 +8,6 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XF.Material.Forms.Resources;
-using XF.Material.Forms.UI.Dialogs;
 using XF.Material.Forms.UI.Internals;
 
 namespace XF.Material.Forms.UI
@@ -31,6 +30,8 @@ namespace XF.Material.Forms.UI
         public static readonly BindableProperty ChoiceSelectedCommandProperty = BindableProperty.Create(nameof(ChoiceSelectedCommand), typeof(ICommand), typeof(MaterialTextField));
 
         public static readonly BindableProperty ChoicesProperty = BindableProperty.Create(nameof(Choices), typeof(IList), typeof(MaterialTextField));
+
+        public static readonly BindableProperty DateProperty = BindableProperty.Create(nameof(Date), typeof(DateTime?), typeof(MaterialTextField), null, BindingMode.TwoWay);
 
         public static readonly BindableProperty ErrorColorProperty = BindableProperty.Create(nameof(ErrorColor), typeof(Color), typeof(MaterialTextField), Material.Color.Error);
 
@@ -103,6 +104,10 @@ namespace XF.Material.Forms.UI
             this.InitializeComponent();
             this.SetPropertyChangeHandler(ref _propertyChangeActions);
             this.SetControl();
+
+            //Set the binding context to the MaterialTextField
+            entry.BindingContext = this;
+            entry.SetBinding(MaterialEntry.DateProperty, "Date");
         }
 
         public event EventHandler<SelectedItemChangedEventArgs> ChoiceSelected;
@@ -182,6 +187,12 @@ namespace XF.Material.Forms.UI
         {
             get => (string)this.GetValue(ErrorTextProperty);
             set => this.SetValue(ErrorTextProperty, value);
+        }
+
+        public DateTime? Date
+        {
+            get => (DateTime?)this.GetValue(DateProperty);
+            set => this.SetValue(DateProperty, value);
         }
 
         /// <summary>
@@ -720,6 +731,9 @@ namespace XF.Material.Forms.UI
                     this.Text = entry.Text;
                     this.UpdateCounter();
                     break;
+                //case nameof(Date):
+                //    Console.WriteLine("HOLA MUNDO");
+                //    break;
             }
         }
 
@@ -898,7 +912,10 @@ namespace XF.Material.Forms.UI
                     break;
 
                 case MaterialTextFieldInputType.Choice:
+                    break;
 
+                case MaterialTextFieldInputType.Date:
+                    entry.InputType = MaterialTextFieldInputType.Date;
                     break;
             }
 
@@ -961,11 +978,6 @@ namespace XF.Material.Forms.UI
 
         private void OnTextChanged(string text)
         {
-            //if (this.InputType == MaterialTextFieldInputType.Choice && !string.IsNullOrEmpty(text) && _choices?.Contains(text) == false)
-            //{
-            //    throw new InvalidOperationException($"The `Text` property value `{this.Text}` does not match any item in the collection `Choices`.");
-            //}
-
             if (this.InputType == MaterialTextFieldInputType.Choice && !string.IsNullOrEmpty(text))
             {
                 var selectedChoice = this.GetSelectedChoice(text) ?? text;
@@ -986,6 +998,15 @@ namespace XF.Material.Forms.UI
         private void OnTextFontFamilyChanged(string fontFamily)
         {
             entry.FontFamily = fontFamily;
+        }
+
+        private void OnDateChanged(DateTime? date)
+        {
+            entry.Date = date;
+            if (date.HasValue)
+            {
+                Text = date.Value.ToString("dd/MM/yyyy");
+            }
         }
 
         private void OnTintColorChanged(Color tintColor)
@@ -1039,6 +1060,7 @@ namespace XF.Material.Forms.UI
                 { nameof(this.AlwaysShowUnderline), () => this.OnAlwaysShowUnderlineChanged(this.AlwaysShowUnderline) },
                 { nameof(this.AlwaysUpperCase), () => this.AlwaysUpperCaseChanged(this.AlwaysUpperCase) },
                 { nameof(this.MaxLength), () => this.OnMaxLengthChanged(this.MaxLength) },
+                { nameof(this.Date), () => this.OnDateChanged(this.Date) },
                 { nameof(this.ReturnCommand), () => this.OnReturnCommandChanged(this.ReturnCommand) },
                 { nameof(this.ReturnCommandParameter), () => this.OnReturnCommandParameterChanged(this.ReturnCommandParameter) },
                 { nameof(this.ReturnType), () => this.OnReturnTypeChangedd(this.ReturnType) },

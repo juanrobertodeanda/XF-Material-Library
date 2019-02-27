@@ -3,7 +3,6 @@ using MaterialMvvmSample.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -40,6 +39,8 @@ namespace MaterialMvvmSample.ViewModels
                 }
             };
             this.SelectedFilters = new List<int>();
+
+            Eta = DateTime.Now.AddDays(10);
         }
 
         public Color PrimaryColor => Color.Red;
@@ -67,6 +68,14 @@ namespace MaterialMvvmSample.ViewModels
             }
         }
 
+        private DateTime? eta;
+        public DateTime? Eta
+        {
+            get { return eta; }
+            set { Set(ref eta, value); }
+        }
+
+
         private bool _hasError;
         public bool HasError
         {
@@ -81,6 +90,13 @@ namespace MaterialMvvmSample.ViewModels
         public ICommand ListMenuCommand => new Command<MaterialMenuResult>(async (s) => await this.ListMenuSelected(s));
 
         public ICommand MenuCommand => new Command<MaterialMenuResult>(async (s) => await this.MenuSelected(s));
+
+        public ICommand Clicked => new Command(() =>
+        {
+            HasError = !HasError;
+            if (Eta.HasValue)
+                Console.WriteLine(Eta.Value.ToString("dd/MM/yyyy"));
+        });
 
         public ICommand FiltersSelectedCommand => new Command<int[]>((s) =>
         {

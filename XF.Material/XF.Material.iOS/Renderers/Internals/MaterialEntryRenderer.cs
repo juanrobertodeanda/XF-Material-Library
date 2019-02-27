@@ -1,4 +1,6 @@
 ﻿using Foundation;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using UIKit;
@@ -31,6 +33,50 @@ namespace XF.Material.iOS.Renderers.Internals
             {
                 Control.InputView = new UIView();
             }
+
+            if ((Element as MaterialEntry).AlwaysUppercase)
+            {
+                Control.AutocapitalizationType = UITextAutocapitalizationType.AllCharacters;
+            }
+
+            if ((Element as MaterialEntry).InputType == Forms.UI.MaterialTextFieldInputType.Date)
+            {
+                var datePicker = new UIDatePicker();
+                datePicker.Mode = UIDatePickerMode.Date;
+                datePicker.AddTarget(DateTextField, UIControlEvent.ValueChanged);
+
+                if ((Element as MaterialEntry).Date.HasValue)
+                {
+                    datePicker.Date = (NSDate)(Element as MaterialEntry).Date.Value;
+                }
+
+                Control.InputView = datePicker;
+
+                var toolBar = new UIToolbar();
+                toolBar.BarStyle = UIBarStyle.Default;
+                toolBar.Translucent = true;
+                toolBar.TintColor = UIColor.Black;
+                toolBar.SizeToFit();
+                var doneButton = new UIBarButtonItem(title: "Aceptar", style: UIBarButtonItemStyle.Plain, handler: (sender, args) => Control.ResignFirstResponder());
+                var spaceButton = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace, target: null, action: null);
+
+                toolBar.SetItems(new UIBarButtonItem[] { spaceButton, doneButton }, animated: false);
+                toolBar.UserInteractionEnabled = true;
+
+                Control.InputAccessoryView = toolBar;
+            }
+        }
+
+        private void DateTextField(object sender, EventArgs args)
+        {
+            var picker = Control.InputView as UIDatePicker;
+            var dateFormat = new NSDateFormatter();
+            dateFormat.DateFormat = "dd/MM/yyyy";
+            var eventDate = picker.Date;
+
+            var dateString = dateFormat.StringFor(eventDate);
+            Control.Text = dateString;
+            (Element as MaterialEntry).Date = (DateTime?)picker.Date;
         }
 
         private void Control_EditingChanged(object sender, System.EventArgs e)

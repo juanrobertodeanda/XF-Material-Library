@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Globalization;
+using Android.App;
 using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Support.V4.Content;
@@ -16,6 +19,8 @@ namespace XF.Material.Droid.Renderers.Internals
 {
     internal class MaterialEntryRenderer : EntryRenderer
     {
+        DatePickerDialog dialog;
+
         public MaterialEntryRenderer(Context context) : base(context) { }
 
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
@@ -42,11 +47,89 @@ namespace XF.Material.Droid.Renderers.Internals
             {
                 Control.ShowSoftInputOnFocus = false;
             }
+
+            if ((Element as MaterialEntry).InputType == Forms.UI.MaterialTextFieldInputType.Date)
+            {
+                this.Control.Click += OnPickerClick;
+                this.Control.KeyListener = null;
+                this.Control.FocusChange += OnPickerFocusChange;
+            }
         }
 
-        private void Control_Click(object sender, System.EventArgs e)
+        void OnPickerFocusChange(object sender, Android.Views.View.FocusChangeEventArgs e)
         {
-            HideKeyboard();
+            if (e.HasFocus)
+            {
+                ShowDatePicker();
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (Control != null)
+            {
+                this.Control.Click -= OnPickerClick;
+                this.Control.FocusChange -= OnPickerFocusChange;
+
+                if (dialog != null)
+                {
+                    dialog.Hide();
+                    dialog.Dispose();
+                    dialog = null;
+                }
+            }
+
+            base.Dispose(disposing);
+        }
+
+        void OnPickerClick(object sender, EventArgs e)
+        {
+            ShowDatePicker();
+        }
+
+        void SetDate(DateTime date)
+        {
+            this.Control.Text = date.ToString("dd/MM/yyyy");
+            (Element as MaterialEntry).Date = date;
+        }
+
+        private void ShowDatePicker()
+        {
+            var date = (Element as MaterialEntry).Date;
+            if(date is null)
+            {
+                CreateDatePickerDialog(DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.Now.Day);
+            }
+            else
+            {
+                CreateDatePickerDialog(date.Value.Year, date.Value.Month - 1, date.Value.Day);
+            }
+            dialog.Show();
+        }
+
+        void CreateDatePickerDialog(int year, int month, int day)
+        {
+            var view = Element as MaterialEntry;
+            dialog = new DatePickerDialog(Context, (o, e) =>
+            {
+                view.Date = e.Date;
+                ((IElementController)view).SetValueFromRenderer(VisualElement.IsFocusedProperty, false);
+                Control.ClearFocus();
+
+                dialog = null;
+            }, year, month, day);
+
+            dialog.SetButton("Aceptar", (sender, e) =>
+            {
+                SetDate(dialog.DatePicker.DateTime);
+                (Element as MaterialEntry).Date = dialog.DatePicker.DateTime;
+            });
+
+            dialog.SetButton2("Cancelar", (sender, e) =>
+            {
+                (Element as MaterialEntry).Date = null;
+                Control.Text = string.Empty;
+            });
         }
 
         private void HideKeyboard()
