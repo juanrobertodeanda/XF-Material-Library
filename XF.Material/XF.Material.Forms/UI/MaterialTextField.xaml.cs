@@ -465,7 +465,10 @@ namespace XF.Material.Forms.UI
         /// <summary>
         /// Requests to focus this text field.
         /// </summary>
-        public new void Focus() => entry.Focus();
+        public new void Focus()
+        {
+            entry.Focus();
+        }
 
         protected override void LayoutChildren(double x, double y, double width, double height)
         {
@@ -592,7 +595,7 @@ namespace XF.Material.Forms.UI
         {
             if (startObject != null && !string.IsNullOrEmpty(this.Text) && !_wasFocused)
             {
-                if (placeholder.TranslationY == -12)
+                if (placeholder.TranslationY == -12 && _wasFocused)
                 {
                     return;
                 }
@@ -717,6 +720,11 @@ namespace XF.Material.Forms.UI
                 this.Focused?.Invoke(this, new FocusEventArgs(entry, entry.IsFocused));
                 this.UpdateCounter();
             }
+            
+            if(e.PropertyName == nameof(MaterialEntry.ShowKeyboard))
+            {
+                var a = 01;
+            }
 
             switch (e.PropertyName)
             {
@@ -724,16 +732,9 @@ namespace XF.Material.Forms.UI
                     this.AnimatePlaceHolder();
                     break;
                 case nameof(Entry.Text):
-                    if (!string.IsNullOrWhiteSpace(Text))
-                    {
-                        _wasFocused = false;
-                    }
                     this.Text = entry.Text;
                     this.UpdateCounter();
                     break;
-                //case nameof(Date):
-                //    Console.WriteLine("HOLA MUNDO");
-                //    break;
             }
         }
 
@@ -984,6 +985,8 @@ namespace XF.Material.Forms.UI
                 this.ChoiceSelected?.Invoke(this, new SelectedItemChangedEventArgs(selectedChoice));
                 this.ChoiceSelectedCommand?.Execute(selectedChoice);
             }
+
+            _wasFocused = !string.IsNullOrWhiteSpace(entry.Text);
 
             entry.Text = text;
             this.AnimatePlaceHolderOnStart(this);

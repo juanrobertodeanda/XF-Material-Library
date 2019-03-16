@@ -4,6 +4,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:local="clr-namespace:MaterialMvvmSample.Views"
                     xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material.Forms"
+                    xmlns:controls="clr-namespace:MaterialMvvmSample.Controls"
+                    xmlns:internal="clr-namespace:XF.Material.Forms.UI.Internals;assembly=XF.Material.Forms"
                     x:Name="Root"
                     Title="Material MVVM"
                     material:MaterialNavigationPage.AppBarColor="#2c3e50"
@@ -142,27 +144,107 @@
                                             Placeholder="Username"
                                             TintColor="#2c3e50" />-->
 
-                <Button Command="{Binding Clicked}" Text="Llenar" />
+                <material:MaterialCard CornerRadius="10" Elevation="1" IsClippedToBounds="True"
+                                       Padding="1" Margin="15,10" HeightRequest="70">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                <material:MaterialTextField x:Name="entry" 
-                                            Placeholder="Operación"
-                                            ShowKeyboard="False"
-                                            HasError="{Binding HasError}"
-                                            Date="{Binding Eta}"
+                        <BoxView Grid.Column="0" BackgroundColor="Green"/>
+
+                    </Grid>
+                </material:MaterialCard>
+               
+                <controls:SearchablePicker Placeholder="Operación"
+                                           HasError="False"
+                                           ErrorText="HDKASKJD"
+                                           ShowKeyboard="False"
+                                           Choices="{Binding Choices}"
+                                           Text="{Binding SelectedChoice}"
+                                           AlwaysShowUnderline ="True"
+                                           IsSpellCheckEnabled="False"
+                                           IsTextPredictionEnabled="False"
+                                           BackgroundColor="Transparent"
+                                           InputType="Choice" />
+
+                <controls:SearchablePicker Placeholder="Operación"
+                                           HasError="False"
+                                           ErrorText="HDKASKJD"
+                                           ShowKeyboard="False"
+                                           Choices="{Binding Choices}"
+                                           Text="{Binding SelectedChoice}"
+                                           AlwaysShowUnderline ="True"
+                                           IsSpellCheckEnabled="False"
+                                           IsTextPredictionEnabled="False"
+                                           BackgroundColor="Transparent"
+                                           InputType="Choice" />
+
+                <controls:SearchablePicker Placeholder="Operación"
+                                           HasError="False"
+                                           ErrorText="HDKASKJD"
+                                           ShowKeyboard="False"
+                                           Choices="{Binding Choices}"
+                                           Text="{Binding SelectedChoice}"
+                                           AlwaysShowUnderline ="True"
+                                           IsSpellCheckEnabled="False"
+                                           IsTextPredictionEnabled="False"
+                                           BackgroundColor="Transparent"
+                                           InputType="Choice" />
+
+                <controls:SearchablePicker Placeholder="Operación"
+                                           HasError="False"
+                                           ErrorText="HDKASKJD"
+                                           ShowKeyboard="False"
+                                           Choices="{Binding Choices}"
+                                           Text="{Binding SelectedChoice}"
+                                           AlwaysShowUnderline ="True"
+                                           IsSpellCheckEnabled="False"
+                                           IsTextPredictionEnabled="False"
+                                           BackgroundColor="Transparent"
+                                           InputType="Choice" />
+
+                <controls:SearchablePicker Placeholder="Operación"
+                                           HasError="False"
+                                           ErrorText="HDKASKJD"
+                                           ShowKeyboard="False"
+                                           Choices="{Binding Choices}"
+                                           Text="{Binding SelectedChoice}"
+                                           AlwaysShowUnderline ="True"
+                                           IsSpellCheckEnabled="False"
+                                           IsTextPredictionEnabled="False"
+                                           BackgroundColor="Transparent"
+                                           InputType="Choice" />
+
+                <controls:SearchablePicker Placeholder="Operación"
+                                           HasError="False"
+                                           ErrorText="HDKASKJD"
+                                           ShowKeyboard="False"
+                                           Choices="{Binding Choices}"
+                                           Text="{Binding SelectedChoice}"
+                                           AlwaysShowUnderline ="True"
+                                           IsSpellCheckEnabled="False"
+                                           IsTextPredictionEnabled="False"
+                                           BackgroundColor="Transparent"
+                                           InputType="Choice" />
+
+                <material:MaterialTextField x:Name="entry2" 
+                                            Placeholder="Prueba"
+                                            Text="HoLA"
                                             AlwaysShowUnderline ="True"
                                             IsSpellCheckEnabled="False"
                                             IsTextPredictionEnabled="False"
                                             BackgroundColor="Transparent"
-                                            ErrorText="Este campo es obligatorio" 
-                                            InputType="Date" />
-                
+                                            InputType="Text" />
+
+
                 <material:MaterialTextField AlwaysShowUnderline="True"
                                             BackgroundColor="Transparent"
                                             FocusCommand="{Binding EmailFocusCommand}"
                                             HasError="{Binding EmailHasError}"
                                             HelperText="*Required"
                                             Icon="xf_error"
-                                            ShowKeyboard="False"
                                             IconTintColor="Gray"
                                             InputType="Email"
                                             IsSpellCheckEnabled="False"

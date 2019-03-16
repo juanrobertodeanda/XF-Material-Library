@@ -6,6 +6,7 @@ using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Support.V4.Content;
 using Android.Text;
+using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Xamarin.Forms;
@@ -13,6 +14,7 @@ using Xamarin.Forms.Platform.Android;
 using XF.Material.Droid.Renderers.Internals;
 using XF.Material.Droid.Utilities;
 using XF.Material.Forms.UI.Internals;
+using static Android.Views.View;
 
 [assembly: ExportRenderer(typeof(MaterialEntry), typeof(MaterialEntryRenderer))]
 namespace XF.Material.Droid.Renderers.Internals
@@ -29,6 +31,8 @@ namespace XF.Material.Droid.Renderers.Internals
 
             if (e?.NewElement == null) return;
             this.ChangeCursorColor();
+            Control.ShowSoftInputOnFocus = false;
+
             this.Control.Background = new ColorDrawable(Color.Transparent.ToAndroid());
             this.Control.SetPadding(0, 0, 0, 0);
             this.Control.SetIncludeFontPadding(false);
@@ -41,11 +45,6 @@ namespace XF.Material.Droid.Renderers.Internals
             if ((Element as MaterialEntry).AlwaysUppercase)
             {
                 Control.SetFilters(new Android.Text.IInputFilter[] { new InputFilterAllCaps() });
-            }
-
-            if (!(Element as MaterialEntry).ShowKeyboard)
-            {
-                Control.ShowSoftInputOnFocus = false;
             }
 
             if ((Element as MaterialEntry).InputType == Forms.UI.MaterialTextFieldInputType.Date)
@@ -132,12 +131,6 @@ namespace XF.Material.Droid.Renderers.Internals
             });
         }
 
-        private void HideKeyboard()
-        {
-            InputMethodManager imm = (InputMethodManager)Context.GetSystemService(Context.InputMethodService);
-            imm.HideSoftInputFromWindow(Control.WindowToken, 0);
-        }
-
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
@@ -147,6 +140,7 @@ namespace XF.Material.Droid.Renderers.Internals
                 this.ChangeCursorColor();
             }
         }
+
 
         private void ChangeCursorColor()
         {
@@ -171,6 +165,15 @@ namespace XF.Material.Droid.Renderers.Internals
             {
                 System.Diagnostics.Debug.WriteLine("Cannot change Textfield's cursor color.");
             }
+        }
+    }
+
+    public class OnClickListener : Java.Lang.Object, IOnClickListener
+    {
+        public void OnClick(Android.Views.View v)
+        {
+            InputMethodManager inputMethodManager = (InputMethodManager)v.Context.GetSystemService(Context.InputMethodService);
+            inputMethodManager.HideSoftInputFromWindow(v.WindowToken, 0);
         }
     }
 }

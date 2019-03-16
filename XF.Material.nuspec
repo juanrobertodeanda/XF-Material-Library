@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0"?>
 <package>
   <metadata>
-    <id>XF.Material</id>
+    <id>XF.Material.Plus</id>
     <title>XF.Material Library</title>
-    <version>1.4.0.1</version>
-    <authors>Dustin Catap</authors>
+    <version>1.0.3</version>
+    <authors>Dustin Catap, Nestor Flores</authors>
     <owners>Dustin Catap</owners>
     <projectUrl>https://github.com/contrix09/XF-Material-Library</projectUrl>
     <licenseUrl>https://github.com/contrix09/XF-Material-Library/blob/master/LICENSE.md</licenseUrl>

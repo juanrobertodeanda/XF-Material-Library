@@ -44,6 +44,7 @@ namespace XF.Material.iOS.Renderers.Internals
                 var datePicker = new UIDatePicker();
                 datePicker.Mode = UIDatePickerMode.Date;
                 datePicker.AddTarget(DateTextField, UIControlEvent.ValueChanged);
+                datePicker.SetDate((NSDate)DateTime.Now, true);
 
                 if ((Element as MaterialEntry).Date.HasValue)
                 {
@@ -51,6 +52,7 @@ namespace XF.Material.iOS.Renderers.Internals
                 }
 
                 Control.InputView = datePicker;
+                Control.EditingDidBegin += Control_EditingDidBegin;
 
                 var toolBar = new UIToolbar();
                 toolBar.BarStyle = UIBarStyle.Default;
@@ -67,16 +69,24 @@ namespace XF.Material.iOS.Renderers.Internals
             }
         }
 
+        private void Control_EditingDidBegin(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(Control.Text))
+            {
+                (Element as MaterialEntry).Date = DateTime.Now;
+            }
+        }
+
         private void DateTextField(object sender, EventArgs args)
         {
             var picker = Control.InputView as UIDatePicker;
             var dateFormat = new NSDateFormatter();
             dateFormat.DateFormat = "dd/MM/yyyy";
-            var eventDate = picker.Date;
 
-            var dateString = dateFormat.StringFor(eventDate);
-            Control.Text = dateString;
-            (Element as MaterialEntry).Date = (DateTime?)picker.Date;
+            var eventDate = DateTime.SpecifyKind((DateTime)picker.Date, DateTimeKind.Utc).ToLocalTime(); ;
+
+            Control.Text = eventDate.ToString("dd/MM/yyyy");
+            (Element as MaterialEntry).Date = (DateTime?)eventDate;
         }
 
         private void Control_EditingChanged(object sender, System.EventArgs e)
@@ -94,6 +104,7 @@ namespace XF.Material.iOS.Renderers.Internals
                     var textFieldText = Control.Text.Replace(",", "");
                     var formatter = new NSNumberFormatter();
                     formatter.NumberStyle = NSNumberFormatterStyle.Decimal;
+                    formatter.MaximumFractionDigits = 10;
                     var a = double.Parse(textFieldText);
                     var number = new NSNumber(a);
                     var formateOutput = formatter.StringFromNumber(number);
