@@ -79,6 +79,8 @@ namespace XF.Material.Forms.UI
 
         public static readonly BindableProperty TextChangeCommandProperty = BindableProperty.Create(nameof(TextChangeCommand), typeof(Command<string>), typeof(MaterialTextField));
 
+        public static readonly BindableProperty ChoiceCommandProperty = BindableProperty.Create(nameof(ChoiceCommand), typeof(Command), typeof(MaterialTextField));
+
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(MaterialTextField), Color.FromHex("#D0000000"));
 
         public static readonly BindableProperty TextFontFamilyProperty = BindableProperty.Create(nameof(TextFontFamily), typeof(string), typeof(MaterialTextField));
@@ -409,6 +411,12 @@ namespace XF.Material.Forms.UI
             set => this.SetValue(TextChangeCommandProperty, value);
         }
 
+        public Command ChoiceCommand
+        {
+            get => (Command)this.GetValue(ChoiceCommandProperty);
+            set => this.SetValue(ChoiceCommandProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the color of this text field's input text.
         /// </summary>
@@ -720,11 +728,6 @@ namespace XF.Material.Forms.UI
                 this.Focused?.Invoke(this, new FocusEventArgs(entry, entry.IsFocused));
                 this.UpdateCounter();
             }
-            
-            if(e.PropertyName == nameof(MaterialEntry.ShowKeyboard))
-            {
-                var a = 01;
-            }
 
             switch (e.PropertyName)
             {
@@ -986,7 +989,7 @@ namespace XF.Material.Forms.UI
                 this.ChoiceSelectedCommand?.Execute(selectedChoice);
             }
 
-            _wasFocused = !string.IsNullOrWhiteSpace(entry.Text);
+            _wasFocused = !string.IsNullOrWhiteSpace(entry.Text) && InputType != MaterialTextFieldInputType.Date;
 
             entry.Text = text;
             this.AnimatePlaceHolderOnStart(this);
@@ -1039,7 +1042,7 @@ namespace XF.Material.Forms.UI
 
             mainTapGesture.Command = new Command(() =>
             {
-                Focus();
+                ChoiceCommand?.Execute(null);
             });
         }
 

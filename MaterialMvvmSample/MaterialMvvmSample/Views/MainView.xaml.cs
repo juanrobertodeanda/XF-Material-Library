@@ -16,6 +16,16 @@ namespace MaterialMvvmSample.Views
         {
             this.InitializeComponent();
         }
+
+        private void Entry2_Focused(object sender, FocusEventArgs e)
+        {
+            entry1.Text = "HOLA MUNDO";
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            entry1.Text = string.Empty;
+        }
     }
 
     public abstract class BaseMainView : BaseView<MainViewModel> { }

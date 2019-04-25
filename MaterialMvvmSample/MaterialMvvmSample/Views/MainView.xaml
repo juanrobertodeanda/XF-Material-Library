@@ -217,10 +217,10 @@
                                            BackgroundColor="Transparent"
                                            InputType="Choice" />
 
-                <controls:SearchablePicker Placeholder="Operación"
+                <controls:SearchablePicker x:Name="entry1" 
+                                           Placeholder="Operación"
                                            HasError="False"
                                            ErrorText="HDKASKJD"
-                                           ShowKeyboard="False"
                                            Choices="{Binding Choices}"
                                            Text="{Binding SelectedChoice}"
                                            AlwaysShowUnderline ="True"
@@ -229,22 +229,25 @@
                                            BackgroundColor="Transparent"
                                            InputType="Choice" />
 
-                <material:MaterialTextField x:Name="entry2" 
-                                            Placeholder="Prueba"
-                                            Text="HoLA"
+                <material:MaterialTextField Placeholder="Prueba"
                                             AlwaysShowUnderline ="True"
                                             IsSpellCheckEnabled="False"
+                                            ShowKeyboard="True"
                                             IsTextPredictionEnabled="False"
                                             BackgroundColor="Transparent"
-                                            InputType="Text" />
+                                            InputType="Date" />
 
+                <Button Clicked="Button_Clicked" Text="Limpiar"/>
 
-                <material:MaterialTextField AlwaysShowUnderline="True"
+                <material:MaterialTextField x:Name="entry2" 
+                                            Focused="Entry2_Focused"
+                                            AlwaysShowUnderline="True"
                                             BackgroundColor="Transparent"
                                             FocusCommand="{Binding EmailFocusCommand}"
                                             HasError="{Binding EmailHasError}"
                                             HelperText="*Required"
                                             Icon="xf_error"
+                                            ShowKeyboard="False"
                                             IconTintColor="Gray"
                                             InputType="Email"
                                             IsSpellCheckEnabled="False"

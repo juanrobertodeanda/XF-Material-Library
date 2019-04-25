@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Support.V4.Content;
 using Android.Text;
-using Android.Views;
 using Android.Views.InputMethods;
-using Android.Widget;
+using System;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using XF.Material.Droid.Renderers.Internals;
@@ -31,7 +28,6 @@ namespace XF.Material.Droid.Renderers.Internals
 
             if (e?.NewElement == null) return;
             this.ChangeCursorColor();
-            Control.ShowSoftInputOnFocus = false;
 
             this.Control.Background = new ColorDrawable(Color.Transparent.ToAndroid());
             this.Control.SetPadding(0, 0, 0, 0);
@@ -49,6 +45,7 @@ namespace XF.Material.Droid.Renderers.Internals
 
             if ((Element as MaterialEntry).InputType == Forms.UI.MaterialTextFieldInputType.Date)
             {
+                this.SetOnClickListener(new OnClickListener());
                 this.Control.Click += OnPickerClick;
                 this.Control.KeyListener = null;
                 this.Control.FocusChange += OnPickerFocusChange;
@@ -126,8 +123,6 @@ namespace XF.Material.Droid.Renderers.Internals
 
             dialog.SetButton2("Cancelar", (sender, e) =>
             {
-                (Element as MaterialEntry).Date = null;
-                Control.Text = string.Empty;
             });
         }
 
